@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+from utils import get_tariff_rate
+
 
 st.title("Detection of Energy Theft Through Cyber Attack")
 
