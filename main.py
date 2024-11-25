@@ -90,7 +90,7 @@ if vending_data is not None:
 
         anomaly_df = check_anomaly(expected_df, month_list)
 
-        st.write("Anomalies in Energy Purchase")
+        st.write("**Anomalies in Energy Purchase**")
         st.write(anomaly_df)
 
         anomaly_file = get_anomalies_df_for_download(anomaly_df, month_list)
@@ -171,8 +171,24 @@ if meter_data:
 
     cumm_usage_anomaly, detailed_cumm_usage_anomaly = check_cumm_usage_diff(meter_readings_df)
 
-    st.write("Cummulative Usage Anomaly")
+    st.write("**Cummulative Usage Anomalies**")
     st.write(cumm_usage_anomaly)
 
-    st.write(" Detailed Cummulative Usage Anomaly")
+    st.write("**Detailed Cummulative Usage Anomaly**")
     st.write(detailed_cumm_usage_anomaly)
+
+    @st.cache_data
+    def download_cumm_anomalies_data(df):
+        return df.to_csv(index=False).encode("utf-8")
+
+    cumm_anomaly_download_file = download_cumm_anomalies_data(detailed_cumm_usage_anomaly)
+
+    # st.write(anomaly_download_file)
+
+    st.download_button(
+        label="Download Detailed Cummulative Usage Anomaly Data",
+        data=cumm_anomaly_download_file,
+        file_name="Cummulative Usage Anomalies.csv",
+        mime="text/csv",
+        help="Click this button to download data of cummulative usage anomaly occurrences as a csv file"
+        )
