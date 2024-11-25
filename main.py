@@ -210,7 +210,8 @@ if is_vending_data_uploaded:
     if meter_data:
         monthly_usage_anomaly = check_monthly_usage(meter_readings_df, expected_df)
 
-        # st.write(monthly_usage_anomaly)
+        st.write("**Monthly Usage Anomaly**")
+        st.write(monthly_usage_anomaly)
 
         @st.cache_data
         def download_monthly_usage_anomalies_data(df):
