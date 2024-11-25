@@ -92,6 +92,9 @@ if vending_data is not None:
 
     anomaly_file = get_anomalies_df_for_download(anomaly_df, month_list)
 
+    st.write("Anomalies for Download")
+    st.write(anomaly_df)
+
     @st.cache_data
     def download_anomalies_data(df):
         return df.to_excel("Payment Anomalies.xlsx", index=False)
