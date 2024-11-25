@@ -19,8 +19,7 @@ def get_tariff_rate(band):
 
     return tariff_rate
 
-def get_expected_units(df):
-    month_list = ["May", "June", "July", "Aug", "Sept"]
+def get_expected_units(df, month_list):
     permissible_error = 5    # amount of allowable error in percentage
     output_df = df.copy()
 
@@ -58,6 +57,49 @@ def get_expected_units(df):
                                               * output_df[expected_units_column_name_5_5])
         output_df[upper_bound_column_name_5_5] = ((1 + permissible_error/100)
                                               * output_df[expected_units_column_name_5_5])
+
+    return output_df
+
+def check_anomaly(df, month_list):
+    output_df = df.copy()
+    output_df["Anomaly"] = False
+
+    for month in month_list:
+        assigned_units_column_name = " ".join([month, "Kwh"])
+
+        expected_units_column_name_7_5 = " ".join(["Expected Units",month,
+                                                   "(7.5 VAT)"])
+        lower_bound_column_name_7_5 = " ".join(["Lower Bound", month,
+                                                "(7.5 VAT)"])
+        upper_bound_column_name_7_5 = " ".join(["Upper Bound", month,
+                                                "(7.5 VAT)"])
+
+        expected_units_column_name_5_5 = " ".join(["Expected Units",month,
+                                                   "(5.5 VAT)"])
+        lower_bound_column_name_5_5 = " ".join(["Lower Bound", month,
+                                                "(5.5 VAT)"])
+        upper_bound_column_name_5_5 = " ".join(["Upper Bound", month,
+                                                "(5.5 VAT)"])
+
+        anomaly_column_name_5_5 = " ".join([month, "Anomaly (5.5 VAT)"])
+        output_df[anomaly_column_name_5_5] = ((output_df[assigned_units_column_name]
+                                           < output_df[lower_bound_column_name_5_5])
+                                          + (output_df[assigned_units_column_name]
+                                             > output_df[upper_bound_column_name_5_5]))
+
+        anomaly_column_name_7_5 = " ".join([month, "Anomaly (7.5 VAT)"])
+        output_df[anomaly_column_name_7_5] = ((output_df[assigned_units_column_name]
+                                           < output_df[lower_bound_column_name_7_5])
+                                          + (output_df[assigned_units_column_name]
+                                             > output_df[upper_bound_column_name_7_5]))
+
+        output_df["Anomaly"] = (
+            output_df["Anomaly"]
+            + (
+                output_df[anomaly_column_name_5_5]
+                * output_df[anomaly_column_name_7_5]
+                )
+            )
 
     return output_df
 
