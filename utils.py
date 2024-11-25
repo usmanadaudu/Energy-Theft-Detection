@@ -120,19 +120,43 @@ def get_anomalies_df_for_download(df, month_list):
     
     return output_df
 
-def to_excel(df):
+def check_cumm_usage_diff(input_df):
     import pandas as pd
-    from io import BytesIO
-    from pyxlsb import open_workbook as open_xlsb
 
-    output = BytesIO()
-    writer = pd.ExcelWriter(output, engine='xlsxwriter')
-    df.to_excel(writer, index=False, sheet_name='Sheet1')
-    workbook = writer.book
-    worksheet = writer.sheets['Sheet1']
-    format1 = workbook.add_format({'num_format': '0.00'}) 
-    worksheet.set_column('A:A', None, format1)  
-    writer.save()
-    processed_data = output.getvalue()
+    assert "Meter SN" in input_df.columns, "Could not get meter number"
+    assert "Frozen Time" in input_df.columns, "Could not get recording time"
+    assert "Energy Reading(kwh)" in input_df.columns, "Could not get cummulative meter reading"
 
-    return processed_data
+    cumm_usage_anomaly = pd.DataFrame()
+    detailed_cumm_usage_anomaly = pd.DataFrame()
+
+    for meter_no in input_df["Meter SN"].unique():
+        df = input_df[input_df["Meter SN"] == meter_no]
+
+        df["Usage Diff"] = df["Energy Reading(kwh)"].diff()
+
+        cumm_usage_anomaly_index = df[df["Usage Diff"] < 0].index
+
+        if len(cumm_usage_anomaly_index):
+            if not cumm_usage_anomaly.shape[0]:
+                cumm_usage_anomaly = (df
+                                      .loc[
+                                          cumm_usage_anomaly_index,
+                                           ["Meter SN", "Frozen Time"]
+                                          ]
+                                      )
+                detailed_cumm_usage_anomaly = (df[df["Meter SN"] == meter_no])
+            else:
+                cumm_usage_anomaly = pd.concat(
+                    [
+                        cumm_usage_anomaly,
+                        df.loc[cumm_usage_anomaly_index,["Meter SN", "Frozen Time"]]
+                        ])
+                detailed_cumm_usage_anomaly = pd.concat(
+                    [
+                        detailed_cumm_usage_anomaly,
+                        df[df["Meter SN"] == meter_no]
+                    ]
+                )
+
+    return cumm_usage_anomaly, detailed_cumm_usage_anomaly
