@@ -184,8 +184,6 @@ if meter_data:
 
     cumm_anomaly_download_file = download_cumm_anomalies_data(detailed_cumm_usage_anomaly)
 
-    # st.write(anomaly_download_file)
-
     st.download_button(
         label="Download Detailed Cummulative Usage Anomaly Data",
         data=cumm_anomaly_download_file,
@@ -194,6 +192,27 @@ if meter_data:
         help="Click this button to download data of cummulative usage anomaly occurrences as a csv file"
         )
     
+    st.header("Detection of Cyber Attack on Monthly Energy Usage")
+    st.write("Sometimes customers may tamper with meters to increase the residual units left on their meters")
+    st.write("This final step is to detect such acts")
+    st.write("The monthly usage of customers is gotten from the difference of the cummulative energy usage")
+    st.write("When the monthly usage of customers is subtracted from the sum of the energy units the customer has at the beginning of the month and the amount of units the customer is credited in that month, this should be the amount of units left at the beginning of the next month")
+    st.write("Anything contrary to this should be flagged as an anomaly")
+    
     monthly_usage_anomaly = check_monthly_usage(meter_readings_df, expected_df)
 
-    st.write(monthly_usage_anomaly)
+    # st.write(monthly_usage_anomaly)
+
+    @st.cache_data
+    def download_monthly_usage_anomalies_data(df):
+        return df.to_csv(index=False).encode("utf-8")
+
+    monthly_usage_anomaly_download_file = download_monthly_usage_anomalies_data(monthly_usage_anomaly)
+
+    st.download_button(
+        label="Download Monthly Usage Anomaly Data",
+        data=cumm_anomaly_download_file,
+        file_name="Monthly Usage Anomalies.csv",
+        mime="text/csv",
+        help="Click this button to download data of monthly usage anomaly occurrences as a csv file"
+        )
