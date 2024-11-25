@@ -178,6 +178,9 @@ def check_monthly_usage(input_df, expected_df):
     input_df.sort_values(by=["Meter SN", "Frozen Time"], inplace=True)
     input_df.reset_index(drop=True, inplace=True)
 
+    allowable_percentage_error = 1
+    allowable_lower_percentage = 1 - (allowable_percentage_error/100)
+    allowable_upper_percentage = 1 + (allowable_percentage_error/100)
     monthly_usage_anomaly = pd.DataFrame()
 
     for meter_no in input_df["Meter SN"].unique():
@@ -224,7 +227,10 @@ def check_monthly_usage(input_df, expected_df):
 
             if (units_bought.shape[0] and not flag):
                 expected_ending_units = starting_units + units_bought.values[0] - month_usage
-                usage_anomaly = expected_ending_units != ending_units
+                usage_anomaly = (
+                    (ending_units < (allowable_lower_percentage * expected_ending_units)) 
+                    or (ending_units < (allowable_upper_percentage * expected_ending_units))
+                    )
                 if usage_anomaly:
                     anomaly_data = {
                         "Meter SN": [meter_no],
