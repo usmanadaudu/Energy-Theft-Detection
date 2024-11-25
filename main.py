@@ -56,6 +56,7 @@ if vending_data is not None:
 
     except:
         st.error("Upload excel file having the following columns 'CONS_NO', 'MADE_NO', 'Band', 'May Kwh', 'May Naira', 'June Kwh', 'June Naira','July Kwh', 'July Naira', 'Aug Kwh', 'Aug Naira', 'Sept Kwh', 'Sept Naira'")
+        skip_extra_error_message = True
         
     # st.write(vending_df.head())
     try:
@@ -117,7 +118,9 @@ if vending_data is not None:
 
         is_vending_data_uploaded = True
     except Exception as e:
-        st.error(e)
+        if not skip_extra_error_message:
+            st.error(e)
+            skip_extra_error_message = True
 
 
 st.header("Detection of Cyber Attack on Cummulative Energy Usage")
