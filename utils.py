@@ -165,3 +165,84 @@ def check_cumm_usage_diff(input_df):
         )
 
     return cumm_usage_anomaly, detailed_cumm_usage_anomaly
+
+def check_monthly_usage(input_df, expected_df):
+    import pandas as pd
+
+    assert "Meter SN" in input_df.columns, "Could not get meter number"
+    assert "Frozen Time" in input_df.columns, "Could not get recording time"
+    assert "Energy Reading(kwh)" in input_df.columns, "Could not get cummulative meter reading"
+    assert "Meter Units(kwh)" in input_df.columns, "Could not get meter units data"
+
+    input_df["Month Number"] = input_df["Frozen Time"].dt.month
+    input_df.sort_values(by=["Meter SN", "Frozen Time"], inplace=True)
+    input_df.reset_index(drop=True, inplace=True)
+
+    monthly_usage_anomaly = pd.DataFrame()
+
+    for meter_no in input_df["Meter SN"].unique():
+        df = input_df[input_df["Meter SN"] == meter_no].copy()
+
+        df["Energy Usage"] = -df["Energy Reading(kwh)"].diff(periods=-1)
+        total_monthly_usage = df.groupby(by="Month")["Energy Usage"].sum()
+
+        for month in df["Month"].unique():
+            flag = False
+            if month == "August":
+                month_str = "Aug"
+            elif month == "September":
+                month_str = "Sept"
+            else:
+                month_str = month
+
+            starting_units = (df
+                              .loc[
+                                  df["Month"] == month,
+                                  "Energy Reading(kwh)"
+                                  ].values[0])
+            month_usage = total_monthly_usage[month]
+
+            # the reading at the end of the current month is also the reading at
+            # the start of the next month
+            next_month_number = df["Month Number"].values[0] + 1
+            try:
+                ending_units = (df
+                                .loc[
+                                    df["Month Number"] == next_month_number,
+                                    "Energy Reading(kwh)"
+                                    ].values[0])
+            except:
+                flag = True
+                continue
+
+            units_bought = (expected_df
+                            .loc[
+                                expected_df["MADE_NO"]==meter_no,
+                                " ".join([month_str, "Kwh"])
+                                ]
+                            )
+
+            if (units_bought.shape[0] and not flag):
+                usage_anomaly = (starting_units + units_bought.values[0] - month_usage) != ending_units
+                if usage_anomaly:
+                    anomaly_data = {
+                        "Meter SN": [meter_no],
+                        "Month": [month],
+                        "Staring Units": [starting_units],
+                        "Energy Usage": [month_usage],
+                        "Units Bought": [units_bought.values[0]],
+                        "Ending Units": [ending_units]
+                        }
+
+                    if not monthly_usage_anomaly.shape[0]:
+                        monthly_usage_anomaly = pd.DataFrame(anomaly_data)
+                    else:
+                        monthly_usage_anomaly = pd.concat(
+                            [
+                                monthly_usage_anomaly,
+                                pd.DataFrame(anomaly_data)
+                                ],
+                            ignore_index=True
+                            )
+
+    return monthly_usage_anomaly
