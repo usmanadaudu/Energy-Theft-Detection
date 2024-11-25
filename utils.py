@@ -229,7 +229,7 @@ def check_monthly_usage(input_df, expected_df):
                 expected_ending_units = starting_units + units_bought.values[0] - month_usage
                 usage_anomaly = (
                     (ending_units < (allowable_lower_percentage * expected_ending_units)) 
-                    or (ending_units < (allowable_upper_percentage * expected_ending_units))
+                    or (ending_units > (allowable_upper_percentage * expected_ending_units))
                     )
                 if usage_anomaly:
                     anomaly_data = {
