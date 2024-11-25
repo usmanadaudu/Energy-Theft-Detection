@@ -101,6 +101,8 @@ if vending_data is not None:
     
     anomaly_download_file = download_anomalies_data(anomaly_file)
 
+    st.write(anomaly_download_file)
+
     st.download_button(
         "Download Payment Anomaly Data",
         anomaly_download_file,
