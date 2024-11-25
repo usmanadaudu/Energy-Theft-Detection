@@ -98,7 +98,7 @@ if vending_data is not None:
 
     @st.cache_data
     def download_anomalies_data(df):
-        return to_excel(df)
+        return df.to_csv("Anomaly Data.csv", index=False)
     
     anomaly_download_file = download_anomalies_data(anomaly_file)
 
@@ -108,6 +108,6 @@ if vending_data is not None:
         label="Download Payment Anomaly Data",
         data=anomaly_download_file,
         file_name="Payment Anomalies.xlsx",
-        mime="application/vnd.ms-excel",
+        mime="text/csv",
         help="Click this button to download data of anomaly occurrences in units credited to customers as an excel file"
     )
