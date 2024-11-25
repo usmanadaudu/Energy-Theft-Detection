@@ -26,6 +26,7 @@ st.write("Sometimes consumers launch cyber attack on energy units purchase syste
 st.write("These cyber attckas can be detected by comparing the total amount each customer pays per month with the total amount of units the customer is credited per month")
 st.write("VAT is removed from any payment by customers before being credited with the amount left based on the band such customer is on. VAT was formerly 5.5% before being increased to 7.5%. The new VAT is not yet implemented for all customers. Therefore, a purchase will only be flagged if using any of the two VAT values leads to inconsistency in the amount of units credited")
 
+is_vending_data_uploaded = False
 vending_data = st.file_uploader(
     "Upload Customers Vending Data",
     type=["xls", "xlsx"],
@@ -52,65 +53,123 @@ if vending_data is not None:
         assert "Sept Kwh" in vending_df.columns
         assert "Sept Naira" in vending_df.columns
 
-        is_vending_data_uploaded = True
     except:
         st.error("Upload excel file having the following columns 'CONS_NO', 'MADE_NO', 'Band', 'May Kwh', 'May Naira', 'June Kwh', 'June Naira','July Kwh', 'July Naira', 'Aug Kwh', 'Aug Naira', 'Sept Kwh', 'Sept Naira'")
         
     # st.write(vending_df.head())
-
-    vending_df = vending_df[
-        [
-            "CONS_NO",
-            "MADE_NO",
-            "Band",
-            "May Kwh",
-            "May Naira",
-            "June Kwh",
-            "June Naira",
-            "July Kwh",
-            "July Naira",
-            "Aug Kwh",
-            "Aug Naira",
-            "Sept Kwh",
-            "Sept Naira"
+    try:
+        vending_df = vending_df[
+            [
+                "CONS_NO",
+                "MADE_NO",
+                "Band",
+                "May Kwh",
+                "May Naira",
+                "June Kwh",
+                "June Naira",
+                "July Kwh",
+                "July Naira",
+                "Aug Kwh",
+                "Aug Naira",
+                "Sept Kwh",
+                "Sept Naira"
+            ]
         ]
-    ]
 
-    vending_df["TARIFF_RATE"] = vending_df["Band"].apply(get_tariff_rate)
+        vending_df["TARIFF_RATE"] = vending_df["Band"].apply(get_tariff_rate)
 
-    # st.write("Vending Data with Tariff Rate")
-    # st.write(vending_df.head())
+        # st.write("Vending Data with Tariff Rate")
+        # st.write(vending_df.head())
 
-    month_list = ["May", "June", "July", "Aug", "Sept"]
+        month_list = ["May", "June", "July", "Aug", "Sept"]
 
-    expected_df = get_expected_units(vending_df, month_list)
+        expected_df = get_expected_units(vending_df, month_list)
 
-    # st.write("Expected Credit Units")
-    # st.write(expected_df.head())
+        # st.write("Expected Credit Units")
+        # st.write(expected_df.head())
 
-    anomaly_df = check_anomaly(expected_df, month_list)
+        anomaly_df = check_anomaly(expected_df, month_list)
 
-    st.write("Anomalies in Energy Purchase")
-    st.write(anomaly_df)
+        st.write("Anomalies in Energy Purchase")
+        st.write(anomaly_df)
 
-    anomaly_file = get_anomalies_df_for_download(anomaly_df, month_list)
+        anomaly_file = get_anomalies_df_for_download(anomaly_df, month_list)
 
-    # st.write("Anomalies for Download")
-    # st.write(anomaly_file)
+        # st.write("Anomalies for Download")
+        # st.write(anomaly_file)
 
-    @st.cache_data
-    def download_anomalies_data(df):
-        return df.to_csv(index=False).encode("utf-8")
+        @st.cache_data
+        def download_anomalies_data(df):
+            return df.to_csv(index=False).encode("utf-8")
+        
+        anomaly_download_file = download_anomalies_data(anomaly_file)
+
+        # st.write(anomaly_download_file)
+
+        st.download_button(
+            label="Download Payment Anomaly Data",
+            data=anomaly_download_file,
+            file_name="Payment Anomalies.csv",
+            mime="text/csv",
+            help="Click this button to download data of anomaly occurrences in units credited to customers as a csv file"
+        )
+
+        is_vending_data_uploaded = True
+    except Exception as e:
+        st.error(e)
+
+
+st.header("Detection of Cyber Attack on Cummulative Energy Usage")
+st.write("For any meter, two reading are being taken. The first reading is the cummulative energy usage of customers")
+st.write("This reading starts from when the meter is installed till the current time. This reading is asynchronously sent to power stations to monitor energy usage of customers")
+st.write("Anytime the cummulative energy usage reading for a customer reduces, this is an indication of anomaly")
+
+meter_data = st.file_uploader(
+    "Upload All Customers Meter Data",
+    type=["xls", "xlsx"],
+    accept_multiple_files=True,
+    key="meter_data",
+    help="Upload an excel file containing the cummulative energy usage and residual energy usage for all customers taken at the begining of every month"
+)
+
+if meter_data:
+
+    try:
+        meter_readings_df = pd.DataFrame()
+        for uploaded_file in meter_data:
+            dataset = pd.read_excel(uploaded_file, sheet_name=None)
+            input_df = dataset[list(dataset.keys())[-1]]
+
+            if "ENERGY(KWH)" in input_df.columns:
+                    input_df.rename(columns={"ENERGY(KWH)": "Energy Reading(kwh)"}, inplace=True)
+
+            if "CONSUMPTION(KWH)" in input_df.columns:
+                input_df.rename(columns={"CONSUMPTION(KWH)": "Meter Units(kwh)"}, inplace=True)
+
+            if "Consumption(kwh)" in input_df.columns:
+                input_df.rename(columns={"Consumption(kwh)": "Meter Units(kwh)"}, inplace=True)
+
+            assert "Meter SN" in input_df.columns, "Each file should contain the column `Meter SN` which is the meter number"
+            assert "Frozen Time" in input_df.columns, "Each file should contain the column `Frozen Time` which is the time the reading was recorded"
+            assert "Energy Reading(kwh)" in input_df.columns, "Each file should contain the column `ENERGY(KWH)` or `Energy Reading(kwh)` which is the Cummulative energy reading"
+            assert "Meter Units(kwh)" in input_df.columns, "Each file should contain the column `CONSUMPTION(KWH)` or `Consumption(kwh)` which is the residual units on the meter"
+
+            input_df = input_df[["Meter SN", "Frozen Time", "Energy Reading(kwh)", "Meter Units(kwh)"]]
+
+            if not meter_readings_df.shape[0]:
+                meter_readings_df = input_df
+            else:
+                meter_readings_df = pd.concat([meter_readings_df, input_df], ignore_index=True)
+
+            meter_readings_df["Frozen Time"] = pd.to_datetime(meter_readings_df["Frozen Time"])
+            meter_readings_df["Month"] = meter_readings_df["Frozen Time"].dt.month_name()
+
+            meter_readings_df.sort_values(by=["Meter SN", "Frozen Time"], inplace=True)
+            meter_readings_df.reset_index(drop=True, inplace=True)
+
+            st.write(meter_readings_df.head())
+
+    except Exception as e:
+        st.error(e)
+
     
-    anomaly_download_file = download_anomalies_data(anomaly_file)
-
-    # st.write(anomaly_download_file)
-
-    st.download_button(
-        label="Download Payment Anomaly Data",
-        data=anomaly_download_file,
-        file_name="Payment Anomalies.csv",
-        mime="text/csv",
-        help="Click this button to download data of anomaly occurrences in units credited to customers as a csv file"
-    )
-
