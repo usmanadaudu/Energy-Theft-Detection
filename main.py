@@ -5,6 +5,7 @@ import streamlit as st
 from utils import check_anomaly
 from utils import get_tariff_rate
 from utils import get_expected_units
+from utils import check_monthly_usage
 from utils import check_cumm_usage_diff
 from utils import get_anomalies_df_for_download
 
@@ -192,3 +193,7 @@ if meter_data:
         mime="text/csv",
         help="Click this button to download data of cummulative usage anomaly occurrences as a csv file"
         )
+    
+    monthly_usage_anomaly = check_monthly_usage(meter_readings_df, expected_df)
+
+    st.write(monthly_usage_anomaly)
