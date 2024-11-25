@@ -98,7 +98,7 @@ if vending_data is not None:
 
     @st.cache_data
     def download_anomalies_data(df):
-        return df.to_csv("Anomaly Data.csv", index=False)
+        return df.to_csv("Anomaly Data.csv", index=False).encode("utf-8")
     
     anomaly_download_file = download_anomalies_data(anomaly_file)
 
@@ -107,7 +107,7 @@ if vending_data is not None:
     st.download_button(
         label="Download Payment Anomaly Data",
         data=anomaly_download_file,
-        file_name="Payment Anomalies.xlsx",
+        file_name="Payment Anomalies.csv",
         mime="text/csv",
         help="Click this button to download data of anomaly occurrences in units credited to customers as an excel file"
     )
