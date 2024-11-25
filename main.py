@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+from utils import to_excel
 from utils import check_anomaly
 from utils import get_tariff_rate
 from utils import get_expected_units
@@ -97,16 +98,16 @@ if vending_data is not None:
 
     @st.cache_data
     def download_anomalies_data(df):
-        return df.to_excel("Payment Anomalies.xlsx", index=False)
+        return to_excel(df)
     
     anomaly_download_file = download_anomalies_data(anomaly_file)
 
     st.write(anomaly_download_file)
 
     st.download_button(
-        "Download Payment Anomaly Data",
-        anomaly_download_file,
-        "Payment Anomalies.xlsx",
+        label="Download Payment Anomaly Data",
+        data=anomaly_download_file,
+        file_name="Payment Anomalies.xlsx",
         mime="application/vnd.ms-excel",
         help="Click this button to download data of anomaly occurrences in units credited to customers as an excel file"
     )
