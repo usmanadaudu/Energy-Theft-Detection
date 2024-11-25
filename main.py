@@ -111,7 +111,6 @@ if vending_data is not None:
         data=anomaly_download_file,
         file_name="Payment Anomalies.csv",
         mime="text/csv",
-        help="Click this button to download data of anomaly occurrences in units credited to customers as a csv file",
-        type="primary"
+        help="Click this button to download data of anomaly occurrences in units credited to customers as a csv file"
     )
 
