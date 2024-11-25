@@ -51,6 +51,8 @@ if vending_data is not None:
         assert "Aug Naira" in vending_df.columns
         assert "Sept Kwh" in vending_df.columns
         assert "Sept Naira" in vending_df.columns
+
+        is_vending_data_uploaded = True
     except:
         st.error("Upload excel file having the following columns 'CONS_NO', 'MADE_NO', 'Band', 'May Kwh', 'May Naira', 'June Kwh', 'June Naira','July Kwh', 'July Naira', 'Aug Kwh', 'Aug Naira', 'Sept Kwh', 'Sept Naira'")
         
@@ -109,5 +111,7 @@ if vending_data is not None:
         data=anomaly_download_file,
         file_name="Payment Anomalies.csv",
         mime="text/csv",
-        help="Click this button to download data of anomaly occurrences in units credited to customers as a csv file"
+        help="Click this button to download data of anomaly occurrences in units credited to customers as a csv file",
+        type="primary"
     )
+
