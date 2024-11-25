@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+from utils import check_anomaly
 from utils import get_tariff_rate
 from utils import get_expected_units
 
@@ -76,7 +77,14 @@ if vending_data is not None:
     st.write("Vending Data with Tariff Rate")
     st.write(vending_df.head())
 
-    expected_df = get_expected_units(vending_df)
+    month_list = ["May", "June", "July", "Aug", "Sept"]
+
+    expected_df = get_expected_units(vending_df, month_list)
 
     st.write("Expected Credit Units")
     st.write(expected_df.head())
+
+    anomaly_df = check_anomaly(expected_df, month_list)
+
+    st.write("Anomalies in Energy Purchase")
+    st.write(anomaly_df)
