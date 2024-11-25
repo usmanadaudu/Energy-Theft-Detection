@@ -220,7 +220,7 @@ if is_vending_data_uploaded:
 
             st.download_button(
                 label="Download Monthly Usage Anomaly Data",
-                data=cumm_anomaly_download_file,
+                data=monthly_usage_anomaly_download_file,
                 file_name="Monthly Usage Anomalies.csv",
                 mime="text/csv",
                 help="Click this button to download data of monthly usage anomaly occurrences as a csv file"
