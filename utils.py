@@ -123,7 +123,7 @@ def get_anomalies_df_for_download(df, month_list):
 def to_excel(df):
     import pandas as pd
     from io import BytesIO
-    # from pyxlsb import open_workbook as open_xlsb
+    from pyxlsb import open_workbook as open_xlsb
 
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
