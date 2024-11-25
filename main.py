@@ -3,6 +3,7 @@ import pandas as pd
 import streamlit as st
 
 from utils import get_tariff_rate
+from utils import get_expected_units
 
 
 st.title("Detection of Energy Theft Through Cyber Attack")
@@ -72,4 +73,10 @@ if vending_data is not None:
 
     vending_df["TARIFF_RATE"] = vending_df["Band"].apply(get_tariff_rate)
 
+    st.write("Vending Data with Tariff Rate")
     st.write(vending_df.head())
+
+    expected_df = get_expected_units(vending_df)
+
+    st.write("Expected Credit Units")
+    st.write(expected_df.head())
