@@ -94,7 +94,7 @@ if vending_data is not None:
 
     @st.cache_data
     def download_anomalies_data(df):
-        return df.to_excel(index=False).encode("utf-8")
+        return df.to_excel("Payment Anomalies.xlsx", index=False).encode("utf-8")
     
     anomaly_download_file = download_anomalies_data(anomaly_file)
 
