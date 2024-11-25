@@ -123,7 +123,7 @@ if vending_data is not None:
             skip_extra_error_message = True
 
 if is_vending_data_uploaded:
-    st.header("Upload Monthly Meter Data Reading File Below")
+    st.header("Upload Monthly Meter Data Reading Files Below")
     st.write("Upload the readings gotten from the meters at the start of each month. These readings should include the cummulative energy usage and the residual units of each meter")
 
 meter_data = st.file_uploader(
