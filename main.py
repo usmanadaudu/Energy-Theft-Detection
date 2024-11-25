@@ -29,3 +29,5 @@ vending_data = st.file_uploader(
 if vending_data is not None:
     vending_df = pd.read_excel(vending_data)
     
+st.write(vending_df.head())
+    
