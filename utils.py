@@ -159,4 +159,9 @@ def check_cumm_usage_diff(input_df):
                     ]
                 )
 
+    cumm_usage_anomaly.rename(
+        columns={"Frozen Time": "Anomaly Occurence Date"}, 
+        inplace=True
+        )
+
     return cumm_usage_anomaly, detailed_cumm_usage_anomaly
