@@ -195,13 +195,14 @@ if meter_data:
         help="Click this button to download data of cummulative usage anomaly occurrences as a csv file"
         )
     
-    st.header("Detection of Cyber Attack on Monthly Energy Usage")
-    st.write("Sometimes customers may tamper with meters to increase the residual units left on their meters")
-    st.write("This final step is to detect such acts")
-    st.write("The monthly usage of customers is gotten from the difference of the cummulative energy usage")
-    st.write("When the monthly usage of customers is subtracted from the sum of the energy units the customer has at the beginning of the month and the amount of units the customer is credited in that month, this should be the amount of units left at the beginning of the next month")
-    st.write("Anything contrary to this should be flagged as an anomaly")
+st.header("Detection of Cyber Attack on Monthly Energy Usage")
+st.write("Sometimes customers may tamper with meters to increase the residual units left on their meters")
+st.write("This final step is to detect such acts")
+st.write("The monthly usage of customers is gotten from the difference of the cummulative energy usage")
+st.write("When the monthly usage of customers is subtracted from the sum of the energy units the customer has at the beginning of the month and the amount of units the customer is credited in that month, this should be the amount of units left at the beginning of the next month")
+st.write("Anything contrary to this should be flagged as an anomaly")
     
+if meter_data:
     monthly_usage_anomaly = check_monthly_usage(meter_readings_df, expected_df)
 
     # st.write(monthly_usage_anomaly)
