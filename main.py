@@ -54,7 +54,7 @@ if vending_data is not None:
     except:
         st.error("Upload excel file having the following columns 'CONS_NO', 'MADE_NO', 'Band', 'May Kwh', 'May Naira', 'June Kwh', 'June Naira','July Kwh', 'July Naira', 'Aug Kwh', 'Aug Naira', 'Sept Kwh', 'Sept Naira'")
         
-    st.write(vending_df.head())
+    # st.write(vending_df.head())
 
     vending_df = vending_df[
         [
@@ -76,15 +76,15 @@ if vending_data is not None:
 
     vending_df["TARIFF_RATE"] = vending_df["Band"].apply(get_tariff_rate)
 
-    st.write("Vending Data with Tariff Rate")
-    st.write(vending_df.head())
+    # st.write("Vending Data with Tariff Rate")
+    # st.write(vending_df.head())
 
     month_list = ["May", "June", "July", "Aug", "Sept"]
 
     expected_df = get_expected_units(vending_df, month_list)
 
-    st.write("Expected Credit Units")
-    st.write(expected_df.head())
+    # st.write("Expected Credit Units")
+    # st.write(expected_df.head())
 
     anomaly_df = check_anomaly(expected_df, month_list)
 
@@ -93,8 +93,8 @@ if vending_data is not None:
 
     anomaly_file = get_anomalies_df_for_download(anomaly_df, month_list)
 
-    st.write("Anomalies for Download")
-    st.write(anomaly_file)
+    # st.write("Anomalies for Download")
+    # st.write(anomaly_file)
 
     @st.cache_data
     def download_anomalies_data(df):
