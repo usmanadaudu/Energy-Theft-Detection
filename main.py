@@ -25,6 +25,7 @@ st.write("VAT is removed from any payment by customers before being credited wit
 vending_data = st.file_uploader(
     "Upload Customers Vending Data",
     type=["xls", "xlsx"],
+    accept_multiple_files=False,
     key="vending_data",
     help="Upload an excel file containing total amount customers pais per month as well as total amount of units credited per month"
 )
