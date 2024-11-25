@@ -2,7 +2,7 @@ def get_tariff_rate(band):
     """
     This function returns the tariff rate based on the band
     """
-    # import numpy as np
+    import numpy as np
     
     if band == "A":
         tariff_rate = 209.5
