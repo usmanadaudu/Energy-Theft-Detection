@@ -129,7 +129,8 @@ meter_data = st.file_uploader(
     type=["xls", "xlsx"],
     accept_multiple_files=True,
     key="meter_data",
-    help="Upload an excel file containing the cummulative energy usage and residual energy usage for all customers taken at the begining of every month"
+    help="After uploading vending data, upload an excel file containing the cummulative energy usage and residual energy usage for all customers taken at the begining of every month",
+    disabled= not is_vending_data_uploaded
 )
 
 if meter_data:
