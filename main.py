@@ -26,8 +26,6 @@ vending_data = st.file_uploader(
     help="Upload an excel file containing total amount customers pais per month as well as total amount of units credited per month"
 )
 
-if vending_data is None:
-    st.warning("No file was uploaded")
-else:
+if vending_data is not None:
     vending_df = pd.read_excel(vending_data)
     
