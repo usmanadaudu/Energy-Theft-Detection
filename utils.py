@@ -131,7 +131,7 @@ def check_cumm_usage_diff(input_df):
     detailed_cumm_usage_anomaly = pd.DataFrame()
 
     for meter_no in input_df["Meter SN"].unique():
-        df = input_df[input_df["Meter SN"] == meter_no]
+        df = input_df[input_df["Meter SN"] == meter_no].copy()
 
         df["Usage Diff"] = df["Energy Reading(kwh)"].diff()
 
