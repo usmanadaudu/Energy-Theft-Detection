@@ -32,43 +32,43 @@ vending_data = st.file_uploader(
 if vending_data is not None:
     vending_df = pd.read_excel(vending_data)
     
-try:
-    assert "CONS_NO" in vending_data.columns
-    assert "MADE_NO" in vending_data.columns
-    assert "Band" in vending_data.columns
-    assert "May Kwh" in vending_data.columns
-    assert "May Naira" in vending_data.columns
-    assert "June Kwh" in vending_data.columns
-    assert "June Naira" in vending_data.columns
-    assert "July Kwh" in vending_data.columns
-    assert "July Naira" in vending_data.columns
-    assert "Aug Kwh" in vending_data.columns
-    assert "Aug Naira" in vending_data.columns
-    assert "Sept Kwh" in vending_data.columns
-    assert "Sept Naira" in vending_data.columns
-except:
-    st.error("Upload excel file having the following columns 'CONS_NO', 'MADE_NO', 'Band', 'May Kwh', 'May Naira', 'June Kwh', 'June Naira','July Kwh', 'July Naira', 'Aug Kwh', 'Aug Naira', 'Sept Kwh', 'Sept Naira'")
-    
-st.write(vending_df.head())
+    try:
+        assert "CONS_NO" in vending_data.columns
+        assert "MADE_NO" in vending_data.columns
+        assert "Band" in vending_data.columns
+        assert "May Kwh" in vending_data.columns
+        assert "May Naira" in vending_data.columns
+        assert "June Kwh" in vending_data.columns
+        assert "June Naira" in vending_data.columns
+        assert "July Kwh" in vending_data.columns
+        assert "July Naira" in vending_data.columns
+        assert "Aug Kwh" in vending_data.columns
+        assert "Aug Naira" in vending_data.columns
+        assert "Sept Kwh" in vending_data.columns
+        assert "Sept Naira" in vending_data.columns
+    except:
+        st.error("Upload excel file having the following columns 'CONS_NO', 'MADE_NO', 'Band', 'May Kwh', 'May Naira', 'June Kwh', 'June Naira','July Kwh', 'July Naira', 'Aug Kwh', 'Aug Naira', 'Sept Kwh', 'Sept Naira'")
+        
+    st.write(vending_df.head())
 
-vending_df = vending_df[
-    [
-        "CONS_NO",
-        "MADE_NO",
-        "Band",
-        "May Kwh",
-        "May Naira",
-        "June Kwh",
-        "June Naira",
-        "July Kwh",
-        "July Naira",
-        "Aug Kwh",
-        "Aug Naira",
-        "Sept Kwh",
-        "Sept Naira"
+    vending_df = vending_df[
+        [
+            "CONS_NO",
+            "MADE_NO",
+            "Band",
+            "May Kwh",
+            "May Naira",
+            "June Kwh",
+            "June Naira",
+            "July Kwh",
+            "July Naira",
+            "Aug Kwh",
+            "Aug Naira",
+            "Sept Kwh",
+            "Sept Naira"
+        ]
     ]
-]
 
-vending_df["TARIFF_RATE"] = vending_df["Band"].apply(get_tariff_rate)
+    vending_df["TARIFF_RATE"] = vending_df["Band"].apply(get_tariff_rate)
 
-st.write(vending_df.head())
+    st.write(vending_df.head())
