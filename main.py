@@ -98,7 +98,7 @@ if vending_data is not None:
 
     @st.cache_data
     def download_anomalies_data(df):
-        return df.to_csv("Anomaly Data.csv", index=False).encode("utf-8")
+        return df.to_csv(index=False).encode("utf-8")
     
     anomaly_download_file = download_anomalies_data(anomaly_file)
 
