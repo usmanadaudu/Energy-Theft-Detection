@@ -134,42 +134,39 @@ meter_data = st.file_uploader(
 
 if meter_data:
 
-    try:
-        meter_readings_df = pd.DataFrame()
-        for uploaded_file in meter_data:
-            dataset = pd.read_excel(uploaded_file, sheet_name=None)
-            input_df = dataset[list(dataset.keys())[-1]]
+    meter_readings_df = pd.DataFrame()
+    for uploaded_file in meter_data:
+        dataset = pd.read_excel(uploaded_file, sheet_name=None)
+        input_df = dataset[list(dataset.keys())[-1]]
 
-            if "ENERGY(KWH)" in input_df.columns:
-                    input_df.rename(columns={"ENERGY(KWH)": "Energy Reading(kwh)"}, inplace=True)
+        if "ENERGY(KWH)" in input_df.columns:
+                input_df.rename(columns={"ENERGY(KWH)": "Energy Reading(kwh)"}, inplace=True)
 
-            if "CONSUMPTION(KWH)" in input_df.columns:
-                input_df.rename(columns={"CONSUMPTION(KWH)": "Meter Units(kwh)"}, inplace=True)
+        if "CONSUMPTION(KWH)" in input_df.columns:
+            input_df.rename(columns={"CONSUMPTION(KWH)": "Meter Units(kwh)"}, inplace=True)
 
-            if "Consumption(kwh)" in input_df.columns:
-                input_df.rename(columns={"Consumption(kwh)": "Meter Units(kwh)"}, inplace=True)
+        if "Consumption(kwh)" in input_df.columns:
+            input_df.rename(columns={"Consumption(kwh)": "Meter Units(kwh)"}, inplace=True)
 
-            assert "Meter SN" in input_df.columns, "Each file should contain the column `Meter SN` which is the meter number"
-            assert "Frozen Time" in input_df.columns, "Each file should contain the column `Frozen Time` which is the time the reading was recorded"
-            assert "Energy Reading(kwh)" in input_df.columns, "Each file should contain the column `ENERGY(KWH)` or `Energy Reading(kwh)` which is the Cummulative energy reading"
-            assert "Meter Units(kwh)" in input_df.columns, "Each file should contain the column `CONSUMPTION(KWH)` or `Consumption(kwh)` which is the residual units on the meter"
+        assert "Meter SN" in input_df.columns, "Each file should contain the column `Meter SN` which is the meter number"
+        assert "Frozen Time" in input_df.columns, "Each file should contain the column `Frozen Time` which is the time the reading was recorded"
+        assert "Energy Reading(kwh)" in input_df.columns, "Each file should contain the column `ENERGY(KWH)` or `Energy Reading(kwh)` which is the Cummulative energy reading"
+        assert "Meter Units(kwh)" in input_df.columns, "Each file should contain the column `CONSUMPTION(KWH)` or `Consumption(kwh)` which is the residual units on the meter"
 
-            input_df = input_df[["Meter SN", "Frozen Time", "Energy Reading(kwh)", "Meter Units(kwh)"]]
+        input_df = input_df[["Meter SN", "Frozen Time", "Energy Reading(kwh)", "Meter Units(kwh)"]]
 
-            if not meter_readings_df.shape[0]:
-                meter_readings_df = input_df
-            else:
-                meter_readings_df = pd.concat([meter_readings_df, input_df], ignore_index=True)
+        if not meter_readings_df.shape[0]:
+            meter_readings_df = input_df
+        else:
+            meter_readings_df = pd.concat([meter_readings_df, input_df], ignore_index=True)
 
-            meter_readings_df["Frozen Time"] = pd.to_datetime(meter_readings_df["Frozen Time"])
-            meter_readings_df["Month"] = meter_readings_df["Frozen Time"].dt.month_name()
+        meter_readings_df["Frozen Time"] = pd.to_datetime(meter_readings_df["Frozen Time"])
+        meter_readings_df["Month"] = meter_readings_df["Frozen Time"].dt.month_name()
 
-            meter_readings_df.sort_values(by=["Meter SN", "Frozen Time"], inplace=True)
-            meter_readings_df.reset_index(drop=True, inplace=True)
+        meter_readings_df.sort_values(by=["Meter SN", "Frozen Time"], inplace=True)
+        meter_readings_df.reset_index(drop=True, inplace=True)
 
-            st.write(meter_readings_df.head())
+        st.write(meter_readings_df.head())
 
-    except Exception as e:
-        st.error(e)
 
     
