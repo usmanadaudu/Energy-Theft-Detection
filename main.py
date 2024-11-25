@@ -5,7 +5,7 @@ import streamlit as st
 from utils import check_anomaly
 from utils import get_tariff_rate
 from utils import get_expected_units
-from utils import get_anomalies_download_df
+from utils import get_anomalies_df_for_download
 
 
 st.title("Detection of Energy Theft Through Cyber Attack")
@@ -90,7 +90,7 @@ if vending_data is not None:
     st.write("Anomalies in Energy Purchase")
     st.write(anomaly_df)
 
-    anomaly_file = get_anomalies_download_df(anomaly_df)
+    anomaly_file = get_anomalies_df_for_download(anomaly_df, month_list)
 
     @st.cache_data
     def download_anomalies_data(df):
