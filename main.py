@@ -51,7 +51,7 @@ except:
     
 st.write(vending_df.head())
 
-df = df[
+vending_df = vending_df[
     [
         "CONS_NO",
         "MADE_NO",
