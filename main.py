@@ -93,7 +93,7 @@ if vending_data is not None:
     anomaly_file = get_anomalies_df_for_download(anomaly_df, month_list)
 
     st.write("Anomalies for Download")
-    st.write(anomaly_df)
+    st.write(anomaly_file)
 
     @st.cache_data
     def download_anomalies_data(df):
