@@ -222,8 +222,8 @@ def check_monthly_usage(input_df, expected_df):
                                 ]
                             )
 
-            expected_ending_units = starting_units + units_bought.values[0] - month_usage
             if (units_bought.shape[0] and not flag):
+                expected_ending_units = starting_units + units_bought.values[0] - month_usage
                 usage_anomaly = expected_ending_units != ending_units
                 if usage_anomaly:
                     anomaly_data = {
