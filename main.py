@@ -34,19 +34,19 @@ if vending_data is not None:
     vending_df = pd.read_excel(vending_data)
     
     try:
-        assert "CONS_NO" in vending_data.columns
-        assert "MADE_NO" in vending_data.columns
-        assert "Band" in vending_data.columns
-        assert "May Kwh" in vending_data.columns
-        assert "May Naira" in vending_data.columns
-        assert "June Kwh" in vending_data.columns
-        assert "June Naira" in vending_data.columns
-        assert "July Kwh" in vending_data.columns
-        assert "July Naira" in vending_data.columns
-        assert "Aug Kwh" in vending_data.columns
-        assert "Aug Naira" in vending_data.columns
-        assert "Sept Kwh" in vending_data.columns
-        assert "Sept Naira" in vending_data.columns
+        assert "CONS_NO" in vending_df.columns
+        assert "MADE_NO" in vending_df.columns
+        assert "Band" in vending_df.columns
+        assert "May Kwh" in vending_df.columns
+        assert "May Naira" in vending_df.columns
+        assert "June Kwh" in vending_df.columns
+        assert "June Naira" in vending_df.columns
+        assert "July Kwh" in vending_df.columns
+        assert "July Naira" in vending_df.columns
+        assert "Aug Kwh" in vending_df.columns
+        assert "Aug Naira" in vending_df.columns
+        assert "Sept Kwh" in vending_df.columns
+        assert "Sept Naira" in vending_df.columns
     except:
         st.error("Upload excel file having the following columns 'CONS_NO', 'MADE_NO', 'Band', 'May Kwh', 'May Naira', 'June Kwh', 'June Naira','July Kwh', 'July Naira', 'Aug Kwh', 'Aug Naira', 'Sept Kwh', 'Sept Naira'")
         
