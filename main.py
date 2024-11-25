@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-from utils import to_excel
 from utils import check_anomaly
 from utils import get_tariff_rate
 from utils import get_expected_units
