@@ -69,6 +69,6 @@ vending_df = vending_df[
     ]
 ]
 
-df["TARIFF_RATE"] = df["Band"].apply(get_tariff_rate)
+vending_df["TARIFF_RATE"] = vending_df["Band"].apply(get_tariff_rate)
 
-st.write(df.head())
+st.write(vending_df.head())
