@@ -6,6 +6,7 @@ from utils import to_excel
 from utils import check_anomaly
 from utils import get_tariff_rate
 from utils import get_expected_units
+from utils import check_cumm_usage_diff
 from utils import get_anomalies_df_for_download
 
 
@@ -125,7 +126,7 @@ st.write("This reading starts from when the meter is installed till the current 
 st.write("Anytime the cummulative energy usage reading for a customer reduces, this is an indication of anomaly")
 
 meter_data = st.file_uploader(
-    "Upload All Customers Meter Data",
+    "Upload All Customers Meter Data After Uploading Vending Data",
     type=["xls", "xlsx"],
     accept_multiple_files=True,
     key="meter_data",
@@ -161,13 +162,18 @@ if meter_data:
         else:
             meter_readings_df = pd.concat([meter_readings_df, input_df], ignore_index=True)
 
-        meter_readings_df["Frozen Time"] = pd.to_datetime(meter_readings_df["Frozen Time"])
-        meter_readings_df["Month"] = meter_readings_df["Frozen Time"].dt.month_name()
+    meter_readings_df["Frozen Time"] = pd.to_datetime(meter_readings_df["Frozen Time"])
+    meter_readings_df["Month"] = meter_readings_df["Frozen Time"].dt.month_name()
 
-        meter_readings_df.sort_values(by=["Meter SN", "Frozen Time"], inplace=True)
-        meter_readings_df.reset_index(drop=True, inplace=True)
+    meter_readings_df.sort_values(by=["Meter SN", "Frozen Time"], inplace=True)
+    meter_readings_df.reset_index(drop=True, inplace=True)
 
-        st.write(meter_readings_df.head())
+    st.write(meter_readings_df.head())
 
+    cumm_usage_anomaly, detailed_cumm_usage_anomaly = check_cumm_usage_diff(meter_readings_df)
 
-    
+    st.write("Cummulative Usage Anomaly")
+    st.write(cumm_usage_anomaly)
+
+    st.write(" Detailed Cummulative Usage Anomaly")
+    st.write(detailed_cumm_usage_anomaly)
