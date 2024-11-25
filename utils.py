@@ -103,8 +103,7 @@ def check_anomaly(df, month_list):
 
     return output_df
 
-def get_anomalies_download_df(df):
-    month_list = ["May", "June", "July", "Aug"]
+def get_anomalies_df_for_download(df, month_list):
     output_df = df.copy()
     output_column_names = ['CONS_NO', 'MADE_NO', 'Band','TARIFF_RATE']
 
