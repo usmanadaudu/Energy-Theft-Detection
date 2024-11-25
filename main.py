@@ -175,7 +175,7 @@ if is_vending_data_uploaded:
             meter_readings_df.sort_values(by=["Meter SN", "Frozen Time"], inplace=True)
             meter_readings_df.reset_index(drop=True, inplace=True)
 
-            st.write(meter_readings_df.head())
+            # st.write(meter_readings_df.head())
 
             cumm_usage_anomaly, detailed_cumm_usage_anomaly = check_cumm_usage_diff(meter_readings_df)
 
