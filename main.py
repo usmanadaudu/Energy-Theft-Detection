@@ -5,6 +5,7 @@ import streamlit as st
 from utils import check_anomaly
 from utils import get_tariff_rate
 from utils import get_expected_units
+from utils import get_anomalies_download_df
 
 
 st.title("Detection of Energy Theft Through Cyber Attack")
@@ -88,3 +89,19 @@ if vending_data is not None:
 
     st.write("Anomalies in Energy Purchase")
     st.write(anomaly_df)
+
+    anomaly_file = get_anomalies_download_df(anomaly_df)
+
+    @st.cache_data
+    def download_anomalies_data(df):
+        return df.to_excel(index=False).encode("utf-8")
+    
+    anomaly_download_file = download_anomalies_data(anomaly_file)
+
+    st.download_button(
+        "Download Payment Anomaly Data",
+        anomaly_download_file,
+        "Payment Anomalies.xlsx",
+        mime="application/vnd.ms-excel",
+        help="Click this button to download data of anomaly occurrences in units credited to customers as an excel file"
+    )
