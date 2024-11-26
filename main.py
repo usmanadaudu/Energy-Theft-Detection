@@ -17,15 +17,21 @@ st.write("This app implements a system for detecting energy theft which are orch
 st.write("""
 This app detects three types of cyber attacks
 
-1. Cyber attack on energy unit purchases (getting more units than expected for amount paid)
+1. Cyber attack on energy unit (kWh) purchases (getting more units than expected for amount paid)
 2. Cyber attack on cummulative energy usage reading on meter
-3. Cyber attck on meter residual units
+3. Cyber attck on meter residual units (kWh)
 """)
 
 st.header("Detection of Cyber Attack on Energy Unit Purchases")
-st.write("Sometimes consumers launch cyber attack on energy units purchase system in order to be given units far more than what they paid for")
+st.write("Sometimes consumers/customers launch cyber attack on energy units(kWh) purchase system in other to obtain kWh-units far more than the exact worth of amount paid based on tariff band of such customer/consumer")
+st.write("This program also sees direct/indirect increase or decrease in kWh-units caused by system glitches or any form of tampering via system as cyber attack")
 st.write("These cyber attckas can be detected by comparing the total amount each customer pays per month with the total amount of units the customer is credited per month")
-st.write("VAT is removed from any payment by customers before being credited with the amount left based on the band such customer is on. VAT was formerly 5.5% before being increased to 7.5%. The new VAT is not yet implemented for all customers. Therefore, a purchase will only be flagged if using any of the two VAT values leads to inconsistency in the amount of units credited")
+
+st.write("**Value Added Tax Consideration**")
+st.write("VAT is removed from any payment by customers before being credited with the amount left based on the band such customer is on. VAT was formerly 5.5% before being increased to 7.5%. The new VAT is not yet implemented for all customers. Therefore, a purchase will only be flagged if using both of the two VAT values leads to inconsistency in the amount of units credited")
+
+st.write("Limitations")
+st.write("Its important to note that this program do not factor in customers/consumers debt that might be deducted from purchase amount.")
 
 is_vending_data_uploaded = False
 vending_data = st.file_uploader(
@@ -139,7 +145,7 @@ if is_vending_data_uploaded:
         st.header("Detection of Cyber Attack on Cummulative Energy Usage")
         st.write("For any meter, two reading are being taken. The first reading is the cummulative energy usage of customers")
         st.write("This reading starts from when the meter is installed till the current time. This reading is asynchronously sent to power stations to monitor energy usage of customers")
-        st.write("Anytime the cummulative energy usage reading for a customer reduces, this is an indication of anomaly")
+        st.write("Anytime the cummulative energy usage reading for a customer reduces or lower than actual total kWh base on the depleted kWh-units consumption, this is an indication of anomaly")
 
         if meter_data:
 
