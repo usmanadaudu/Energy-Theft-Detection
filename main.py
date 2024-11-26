@@ -30,7 +30,7 @@ st.write("These cyber attckas can be detected by comparing the total amount each
 st.write("**Value Added Tax Consideration**")
 st.write("VAT is removed from any payment by customers before being credited with the amount left based on the band such customer is on. VAT was formerly 5.5% before being increased to 7.5%. The new VAT is not yet implemented for all customers. Therefore, a purchase will only be flagged if using both of the two VAT values leads to inconsistency in the amount of units credited")
 
-st.write("Limitations")
+st.write("**Limitations**")
 st.write("Its important to note that this program do not factor in customers/consumers debt that might be deducted from purchase amount.")
 
 is_vending_data_uploaded = False
