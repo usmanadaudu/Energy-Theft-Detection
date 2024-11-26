@@ -235,7 +235,7 @@ def check_monthly_usage(input_df, expected_df):
                     anomaly_data = {
                         "Meter SN": [meter_no],
                         "Month": [month],
-                        "Staring Units": [starting_units],
+                        "Starting Units": [starting_units],
                         "Energy Usage": [month_usage],
                         "Units Bought": [units_bought.values[0]],
                         "Expected Ending Units": [expected_ending_units],
