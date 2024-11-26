@@ -20,7 +20,7 @@ def get_tariff_rate(band):
     return tariff_rate
 
 def get_expected_units(df, month_list):
-    permissible_error = 5    # amount of allowable error in percentage
+    permissible_error = 2.5    # amount of allowable error in percentage
     output_df = df.copy()
 
     for month in month_list:
